@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: Jwt
+  datasource:
+    url: ${DB_URL:jdbc:sqlserver://localhost:1433;databaseName=jwt;encrypt=true;trustServerCertificate=true}
+    username: ${DB_USERNAME:sa}
+    password: ${DB_PASSWORD:123}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    hikari:
+      pool-name: JwtDevPool
+      minimum-idle: 2
+      maximum-pool-size: 10
+      connection-timeout: 30000
+      validation-timeout: 5000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+
+        format_sql: true
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: ${REDIS_DATABASE:0}
+      connect-timeout: 2s
+      timeout: 2s
+  cache:
+    type: redis
+    cache-names: usersByUsername
+    redis:
+      time-to-live: 10m
+      cache-null-values: false
+      key-prefix: "jwt:"

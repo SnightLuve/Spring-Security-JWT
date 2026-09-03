@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: Jwt
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    hikari:
+      pool-name: JwtProdPool
+      minimum-idle: ${DB_POOL_MIN_IDLE:5}
+      maximum-pool-size: ${DB_POOL_MAX_SIZE:20}
+      connection-timeout: 30000
+      validation-timeout: 5000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      leak-detection-threshold: 60000
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+      username: ${REDIS_USERNAME:}
+      password: ${REDIS_PASSWORD}
+      database: ${REDIS_DATABASE:0}
+      ssl:
+        enabled: ${REDIS_SSL_ENABLED:false}
+      connect-timeout: 2s
+      timeout: 2s
+  cache:
+    type: redis
+    cache-names: usersByUsername
+    redis:
+      time-to-live: ${REDIS_CACHE_TTL:10m}
+      cache-null-values: false
+      key-prefix: "jwt:"
+jwt:
+  secret: ${JWT_SECRET:}
+app:
+  cors:
+    # Production must explicitly declare trusted browser origins.
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:}
