@@ -28,6 +28,11 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    public static final String[] PUBLIC_ENDPOINTS = {
+            "/api/auth/register", "/api/auth/login", "/api/auth/refresh",
+            "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/error"
+    };
+
     private final UserDetailsService userDetailsService;
     private final String allowedOrigins;
 
@@ -50,8 +55,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/refresh",
-                                "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/error").permitAll()
+                        .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(new RestAuthenticationEntryPoint())
